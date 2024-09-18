@@ -13,7 +13,7 @@ public class IntakeRun extends Command {
 
     @Override
     public void initialize(){
-        System.out.println("Initialize");
+        System.out.println("Initialize IntakeRun");
         Robot.intake.set(m_speed);
     }
 
@@ -27,6 +27,7 @@ public class IntakeRun extends Command {
 
     @Override 
     public void end(boolean interrupted){
+        System.out.println("End IntakeRun");
         Robot.intake.stop();
     }
 }
