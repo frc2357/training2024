@@ -1,20 +1,20 @@
-package frc.robot.commands;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class RollerRun extends Command {
+public class ShooterRun extends Command {
     private double m_speed;
 
-    public RollerRun(double speed){
+    public ShooterRun(double speed){
         m_speed = speed;
-        addRequirements(Robot.roller);
+        addRequirements(Robot.intake);
     }
 
     @Override
     public void initialize(){
-        System.out.println("Initialize RollerRun");
-        Robot.roller.set(m_speed);
+        System.out.println("Initialize ShooterRun");
+        Robot.shooter.set(m_speed);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class RollerRun extends Command {
 
     @Override 
     public void end(boolean interrupted){
-        System.out.println("End RollerRun");
-        Robot.roller.stop();
+        System.out.println("End ShooterRun");
+        Robot.shooter.stop();
     }
 }

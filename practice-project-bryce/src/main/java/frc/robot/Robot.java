@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.controls.DriverControls;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,6 +28,8 @@ public class Robot extends TimedRobot {
 
   public static Intake intake;
 
+  public static Shooter shooter;
+
   public static DriverControls driverControls; 
 
   /**
@@ -40,6 +43,8 @@ public class Robot extends TimedRobot {
     intake = new Intake();
 
     roller = new Roller();
+
+    shooter = new Shooter();
     
     driverControls = new DriverControls(new XboxController(0));
 
