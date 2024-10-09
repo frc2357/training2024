@@ -8,7 +8,7 @@ public class ShooterRun extends Command {
 
     public ShooterRun(double speed){
         m_speed = speed;
-        addRequirements(Robot.intake);
+        addRequirements(Robot.shooter);
     }
 
     @Override

@@ -6,10 +6,13 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.pivot.SetPosition;
 import frc.robot.controls.DriverControls;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
 import frc.robot.subsystems.Shooter;
 
@@ -30,7 +33,13 @@ public class Robot extends TimedRobot {
 
   public static Shooter shooter;
 
-  public static DriverControls driverControls; 
+  public static Pivot pivot;
+
+  public static DriverControls driverControls;
+  
+  private final double defaultRotations = 100;
+
+  private double previousRotations = defaultRotations;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,11 +49,13 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    intake = new Intake();
+    //intake = new Intake();
 
-    roller = new Roller();
+    //roller = new Roller();
 
-    shooter = new Shooter();
+    //shooter = new Shooter();
+    
+    pivot = new Pivot();
     
     driverControls = new DriverControls(new XboxController(0));
 
@@ -87,7 +98,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    double rotations = SmartDashboard.getNumber("Motor Rotations", 100);
+    if (previousRotations != rotations) {
+      previousRotations = rotations;
+      SetPosition m_setPosition = new SetPosition(rotations);
+      m_setPosition.schedule();
+    }
+  }
 
   @Override
   public void teleopInit() {
