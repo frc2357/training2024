@@ -35,7 +35,7 @@ public class Robot extends TimedRobot {
 
   public static Pivot pivot;
 
-  public static DriverControls driverControls;
+  //public static DriverControls driverControls;
   
   private final double defaultRotations = 100;
 
@@ -57,7 +57,7 @@ public class Robot extends TimedRobot {
     
     pivot = new Pivot();
     
-    driverControls = new DriverControls(new XboxController(0));
+    //driverControls = new DriverControls(new XboxController(0));
 
     m_robotContainer = new RobotContainer();
   }
@@ -88,6 +88,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    SmartDashboard.putNumber("Motor Rotations", defaultRotations);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -99,9 +100,15 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    double rotations = SmartDashboard.getNumber("Motor Rotations", 100);
+    double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
+    
+    System.out.println("Rotations: " + rotations);
+    
     if (previousRotations != rotations) {
+      System.out.println("Previous Rotations: " + previousRotations);
+
       previousRotations = rotations;
+
       SetPosition m_setPosition = new SetPosition(rotations);
       m_setPosition.schedule();
     }

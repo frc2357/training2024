@@ -17,7 +17,7 @@ public class Pivot extends SubsystemBase {
 
     private RelativeEncoder m_encoder;
 
-    private double kP = 1.5;
+    private double kP = 1;
     private double kI = 0; //0.00000001;
     private double kD = 0;
     private double kIz = 0;
@@ -25,9 +25,9 @@ public class Pivot extends SubsystemBase {
     private double kMaxOutput = 0.25;
     private double kMinOutput = -0.25;
 
-    private double maxVel = 4000;
+    private double maxVel = 2000;
     private double minVel;
-    private double maxAcc = 50000;
+    private double maxAcc = 1500;
     private double allowedErr;
 
     private int smartMotionSlot = 0;
@@ -55,6 +55,10 @@ public class Pivot extends SubsystemBase {
         m_pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         m_pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
         m_pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+    }
+
+    public double getPosition() {
+        return m_encoder.getPosition();
     }
 
     public void setPosition(double rotations) {
