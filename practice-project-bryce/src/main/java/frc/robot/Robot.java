@@ -49,15 +49,15 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    //intake = new Intake();
+    // intake = new Intake();
 
-    //roller = new Roller();
+    // roller = new Roller();
 
-    //shooter = new Shooter();
+    shooter = new Shooter();
     
-    pivot = new Pivot();
+    // pivot = new Pivot();
     
-    //driverControls = new DriverControls(new XboxController(0));
+    // driverControls = new DriverControls(new XboxController(0));
 
     m_robotContainer = new RobotContainer();
   }
@@ -100,18 +100,18 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
+    // double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
     
-    System.out.println("Rotations: " + rotations);
+    System.out.println("Velocity: " + Robot.shooter.getVelocity());
     
-    if (previousRotations != rotations) {
-      System.out.println("Previous Rotations: " + previousRotations);
+    // if (previousRotations != rotations) {
+    //   System.out.println("Previous Rotations: " + previousRotations);
 
-      previousRotations = rotations;
+    //   previousRotations = rotations;
 
-      SetPosition m_setPosition = new SetPosition(rotations);
-      m_setPosition.schedule();
-    }
+    //   SetPosition m_setPosition = new SetPosition(rotations);
+    //   m_setPosition.schedule();
+    // }
   }
 
   @Override

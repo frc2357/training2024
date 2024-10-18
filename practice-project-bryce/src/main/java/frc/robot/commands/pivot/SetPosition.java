@@ -22,7 +22,7 @@ public class SetPosition extends Command {
 
     @Override 
     public boolean isFinished(){
-        return Math.abs(m_rotations - Robot.pivot.getPosition()) < 10;
+        return false; //Math.abs(m_rotations - Robot.pivot.getPosition()) < 10;
     }
 
     @Override 
