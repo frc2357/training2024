@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.pivot.SetPosition;
 import frc.robot.controls.DriverControls;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Roller;
@@ -35,6 +36,8 @@ public class Robot extends TimedRobot {
 
   public static Pivot pivot;
 
+  public static Elevator elevator;
+
   //public static DriverControls driverControls;
   
   private final double defaultRotations = 100;
@@ -57,6 +60,8 @@ public class Robot extends TimedRobot {
     
     // pivot = new Pivot();
     
+    elevator = new Elevator();
+
     // driverControls = new DriverControls(new XboxController(0));
 
     m_robotContainer = new RobotContainer();
@@ -102,7 +107,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
     
-    System.out.println("Velocity: " + Robot.shooter.getVelocity());
+    System.out.println("Velocity: " + Robot.elevator.getPosition());
     
     // if (previousRotations != rotations) {
     //   System.out.println("Previous Rotations: " + previousRotations);

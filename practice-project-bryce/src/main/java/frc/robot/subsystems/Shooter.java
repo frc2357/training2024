@@ -21,6 +21,7 @@ public class Shooter extends SubsystemBase {
         m_topEncoder = m_topShooterMotor.getEncoder();
         
         //m_bottomShooterMotor = new CANSparkMax(26, MotorType.kBrushless);
+        configure();
     }
 
     public void configure(){
@@ -30,7 +31,7 @@ public class Shooter extends SubsystemBase {
         m_topShooterMotor.enableVoltageCompensation(12);
         m_topShooterMotor.setIdleMode(IdleMode.kCoast);
         m_topShooterMotor.setSmartCurrentLimit(0,0);
-
+        
         m_topPidController.setP(0);
         m_topPidController.setI(0);
         m_topPidController.setD(0);

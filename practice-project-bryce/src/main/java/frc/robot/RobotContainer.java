@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.elevator.ElevatorRun;
 import frc.robot.commands.pivot.SetPosition;
 import frc.robot.commands.shooter.ShooterRun;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -46,6 +47,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ShooterRun(1000);
+    return new ElevatorRun(1000);
   }
 }

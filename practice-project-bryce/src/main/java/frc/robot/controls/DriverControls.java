@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.XboxController.Axis;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.ParallelRun;
 import frc.robot.commands.ShootParallelRun;
+import frc.robot.commands.elevator.ElevatorRun;
 import frc.robot.commands.intake.IntakeRunAxis;
 import frc.robot.commands.pivot.SetPosition;
 import frc.robot.commands.roller.RollerRun;
@@ -49,7 +50,7 @@ public class DriverControls {
     
     public void mapControls(){
         //m_leftTrigger.whileTrue(new RollerRun(0.25));
-        //m_rightTrigger.whileTrue(new IntakeRunAxis(m_rightTriggerAxis));
+        m_rightTrigger.whileTrue(new ElevatorRun(0.25));
         //m_aButton.whileTrue(new ParallelRun(0.25));
         m_rightButton.whileTrue(new SetPosition(0.25));
         //m_bButton.whileTrue(new ShooterRun(0.25));
