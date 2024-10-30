@@ -47,6 +47,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ElevatorRun(1000);
+    return new ElevatorRun(500);
   }
 }

@@ -12,9 +12,9 @@ public class VelocityElevatorRun extends Command {
     }
 
     public void initialize(){
-        System.out.println("Initialize ElevatorRun");
+        System.out.println("Initialize VelocityElevatorRun");
         // Robot.elevator.zero();
-        Robot.elevator.setVelocity(m_rotations);
+        // Robot.elevator.setVelocity(m_rotations);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class VelocityElevatorRun extends Command {
 
     @Override 
     public void end(boolean interrupted){
-        System.out.println("End ElevatorRun");
+        System.out.println("End VelocityElevatorRun");
         Robot.elevator.stop();
     }
 }

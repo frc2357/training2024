@@ -13,12 +13,14 @@ public class ElevatorRun extends Command {
 
     public void initialize(){
         System.out.println("Initialize ElevatorRun");
-        // Robot.elevator.zero();
+        Robot.elevator.zero();
         Robot.elevator.setPosition(m_rotations);
     }
 
     @Override
-    public void execute() {}
+    public void execute() {
+        System.out.println("Executing ElevatorRun with current position: " + Robot.elevator.getPosition());
+    }
 
     @Override 
     public boolean isFinished(){

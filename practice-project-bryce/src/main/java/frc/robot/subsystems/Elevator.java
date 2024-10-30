@@ -18,12 +18,12 @@ public class Elevator extends SubsystemBase {
     private int smartMotionSlot = 0;
 
     public Elevator(){
-        m_leftElevatorMotor = new CANSparkMax(1, CANSparkLowLevel.MotorType.kBrushless);
+        m_leftElevatorMotor = new CANSparkMax(25, CANSparkLowLevel.MotorType.kBrushless);
         m_leftPidController = m_leftElevatorMotor.getPIDController();
         m_leftEncoder = m_leftElevatorMotor.getEncoder();
 
-        m_rightElevatorMotor = new CANSparkMax(2, CANSparkLowLevel.MotorType.kBrushless);
-
+        m_rightElevatorMotor = new CANSparkMax(31, CANSparkLowLevel.MotorType.kBrushless);
+        
         configure();
     }
 
@@ -33,12 +33,12 @@ public class Elevator extends SubsystemBase {
         m_leftElevatorMotor.setIdleMode(IdleMode.kBrake);
         m_leftElevatorMotor.setSmartCurrentLimit(60, 60);
 
-        m_leftPidController.setP(1);
-        m_leftPidController.setI(0);
+        m_leftPidController.setP(0.001);
+        m_leftPidController.setI(0.00000001);
         m_leftPidController.setD(0);
         m_leftPidController.setIZone(0);
         m_leftPidController.setFF(0);
-        m_leftPidController.setOutputRange(-1, 1);
+        m_leftPidController.setOutputRange(-0.5, 0.5);
         
         m_leftPidController.setSmartMotionMaxVelocity(2500, smartMotionSlot);
         m_leftPidController.setSmartMotionMinOutputVelocity(0, smartMotionSlot);
@@ -48,8 +48,8 @@ public class Elevator extends SubsystemBase {
         m_rightElevatorMotor.follow(m_leftElevatorMotor);
     }
 
-    //@Deprecated(forRemoval=true)
-    //@Deprecated(forRemoval=false)
+    // @Deprecated(forRemoval=true)
+    // @Deprecated(forRemoval=false)
     public double getPosition() {
         return m_leftEncoder.getPosition();
     }
@@ -67,6 +67,7 @@ public class Elevator extends SubsystemBase {
     }
 
     public void set(double speed) {
+        // System.out.println("Speed: " + speed);
         m_leftElevatorMotor.set(speed);
     }
 

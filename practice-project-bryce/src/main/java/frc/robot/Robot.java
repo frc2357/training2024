@@ -56,7 +56,7 @@ public class Robot extends TimedRobot {
 
     // roller = new Roller();
 
-    shooter = new Shooter();
+    // shooter = new Shooter();
     
     // pivot = new Pivot();
     
@@ -107,7 +107,7 @@ public class Robot extends TimedRobot {
   public void autonomousPeriodic() {
     // double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
     
-    System.out.println("Velocity: " + Robot.elevator.getPosition());
+    // System.out.println("Velocity: " + Robot.elevator.getPosition());
     
     // if (previousRotations != rotations) {
     //   System.out.println("Previous Rotations: " + previousRotations);
