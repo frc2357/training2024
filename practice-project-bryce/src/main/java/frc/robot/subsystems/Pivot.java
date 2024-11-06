@@ -16,6 +16,8 @@ public class Pivot extends SubsystemBase {
 
     private RelativeEncoder m_encoder;
 
+    private int smartMotionSlot = 0;
+
     public Pivot() {
         m_pivotMotor = new CANSparkMax(25, CANSparkLowLevel.MotorType.kBrushless);
         m_pidController = m_pivotMotor.getPIDController();
@@ -38,10 +40,11 @@ public class Pivot extends SubsystemBase {
             -1, 
             1);
         
+        
         // m_pidController.setSmartMotionMaxVelocity(maxVel, smartMotionSlot);
         // m_pidController.setSmartMotionMinOutputVelocity(minVel, smartMotionSlot);
         // m_pidController.setSmartMotionMaxAccel(maxAcc, smartMotionSlot);
-        // m_pidController.setSmartMotionAllowedClosedLoopError(allowedErr, smartMotionSlot);
+        m_pidController.setSmartMotionAllowedClosedLoopError(PIVOT.POSITION_ALLOWED_ERROR, smartMotionSlot);
     }
 
     public double getPosition() {

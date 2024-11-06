@@ -52,23 +52,9 @@ public final class Constants {
     public static final double BOTTOM_MOTOR_I = 0.0;
     public static final double BOTTOM_MOTOR_D = 0.0;
     public static final double BOTTOM_MOTOR_FF = 0.00018;
-  
-    public static final double RPM_TOLERANCE = 100;
   }
 
   public static final class INTAKE {
-    public static final double AXIS_MAX_SPEED = 0.8;
-
-    public static final double DEBOUNCE_TIME_SECONDS = 0.02;
-
-    public static final double FEED_TO_SHOOTER_TIMEOUT = 0;
-    public static final double FLOOR_INTAKE_REVERSE_TIMEOUT = 0.1;
-
-    public static final double PICKUP_SPEED_PERCENT_OUTPUT = .75;
-    public static final double SLOW_PICKUP_SPEED_PERCENT_OUTPUT = .1;
-    public static final double REVERSE_FEED_SPEED_PERCENT_OUTPUT = -0.2;
-    public static final double FEED_SPEED_PERCENT_OUTPUT = 0.75;
-
     public static final IdleMode IDLE_MODE = IdleMode.kBrake;
 
     public static final boolean TOP_MOTOR_INVERTED = false;
@@ -82,13 +68,6 @@ public final class Constants {
   }
 
   public static class PIVOT {
-    public static final double MAX_PIVOT_ANGLE = 70;
-    public static final double MIN_PIVOT_ANGLE = 17.5;
-
-    public static final double END_AFFECTOR_PRELOAD_ANGLE = 68;
-    public static final double INTAKE_FROM_SOURCE_ANGLE = 55;
-    public static final double DEFAULT_PIVOT_ANGLE = 45; // angle of intake
-
     public static final boolean MOTOR_INVERTED = true;
     public static final boolean ENCODER_INVERTED = false;
 
@@ -98,13 +77,6 @@ public final class Constants {
     public static final int MOTOR_FREE_LIMIT_AMPS = 40;
 
     public static final double POSITION_ALLOWED_ERROR = 0.5;
-    public static final boolean POSITION_PID_WRAPPING_ENABLED = false;
-
-    public static final double AXIS_MAX_SPEED = 0.25;
-
-    public static final double ENCODER_POSITION_CONVERSION_FACTOR = 360;
-    public static final double ENCODER_VELOCITY_CONVERSION_FACTOR = 1;
-    public static final double ENCODER_ZERO_OFFSET = 201.0478306 - 10;
 
     /* Closed loop - lines with comments were used for arm rotation 2023 and we will
      * probably need for this 
@@ -113,12 +85,5 @@ public final class Constants {
     public static final double PIVOT_I = 0;
     public static final double PIVOT_D = 0;
     public static final double PIVOT_FF = 0.00045; // Barely moving: .000465
-  
-    public static final String PREFERENCES_ZERO_OFFSET_KEY = "PivotZeroOffset";
-    public static final double ZERO_SPEED = 0.1;
-    public static final double ZERO_SPEED_STOP_TOLERANCE = 0.015;
-    public static final double ZERO_SPEED_INITIAL_SECONDS = 0.15;
-
-    public static final String PIVOT_OFFSET_KEY = "Pivot Offset";
   }
 }
