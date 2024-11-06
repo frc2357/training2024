@@ -2,11 +2,12 @@ package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
+import frc.robot.controls.util.AxisInterface;
 
-public class IntakeRun extends Command {
-    private double m_speed;
+public class IntakeRunAxis extends Command {
+    private AxisInterface m_speed;
 
-    public IntakeRun(double speed){
+    public IntakeRunAxis(AxisInterface speed){
         m_speed = speed;
         addRequirements(Robot.intake);
     }
@@ -14,11 +15,13 @@ public class IntakeRun extends Command {
     @Override
     public void initialize(){
         System.out.println("Initialize IntakeRun");
-        Robot.intake.set(m_speed);
+        Robot.intake.set(m_speed.getValue());
     }
 
     @Override
-    public void execute() {}
+    public void execute() {
+        Robot.intake.set(m_speed.getValue());
+    }
 
     @Override 
     public boolean isFinished(){

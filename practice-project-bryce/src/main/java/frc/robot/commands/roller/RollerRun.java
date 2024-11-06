@@ -1,20 +1,20 @@
-package frc.robot.commands.intake;
+package frc.robot.commands.roller;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Robot;
 
-public class IntakeRun extends Command {
+public class RollerRun extends Command {
     private double m_speed;
 
-    public IntakeRun(double speed){
+    public RollerRun(double speed){
         m_speed = speed;
-        addRequirements(Robot.intake);
+        addRequirements(Robot.roller);
     }
 
     @Override
     public void initialize(){
-        System.out.println("Initialize IntakeRun");
-        Robot.intake.set(m_speed);
+        System.out.println("Initialize RollerRun");
+        Robot.roller.set(m_speed);
     }
 
     @Override
@@ -27,7 +27,7 @@ public class IntakeRun extends Command {
 
     @Override 
     public void end(boolean interrupted){
-        System.out.println("End IntakeRun");
-        Robot.intake.stop();
+        System.out.println("End RollerRun");
+        Robot.roller.stop();
     }
 }

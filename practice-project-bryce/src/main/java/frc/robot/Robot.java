@@ -6,10 +6,16 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.pivot.SetPosition;
 import frc.robot.controls.DriverControls;
+import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Roller;
+import frc.robot.subsystems.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -22,9 +28,21 @@ public class Robot extends TimedRobot {
 
   private RobotContainer m_robotContainer;
 
+  public static Roller roller;
+
   public static Intake intake;
 
-  public static DriverControls driverControls; 
+  public static Shooter shooter;
+
+  public static Pivot pivot;
+
+  public static Elevator elevator;
+
+  //public static DriverControls driverControls;
+  
+  private final double defaultRotations = 100;
+
+  private double previousRotations = defaultRotations;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,9 +52,17 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    intake = new Intake();
+    // intake = new Intake();
 
-    driverControls = new DriverControls(new XboxController(0));
+    // roller = new Roller();
+
+    // shooter = new Shooter();
+    
+    // pivot = new Pivot();
+    
+    elevator = new Elevator();
+
+    // driverControls = new DriverControls(new XboxController(0));
 
     m_robotContainer = new RobotContainer();
   }
@@ -67,6 +93,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    SmartDashboard.putNumber("Motor Rotations", defaultRotations);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     // schedule the autonomous command (example)
@@ -77,7 +104,20 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // double rotations = SmartDashboard.getNumber("Motor Rotations", defaultRotations);
+    
+    // System.out.println("Velocity: " + Robot.elevator.getPosition());
+    
+    // if (previousRotations != rotations) {
+    //   System.out.println("Previous Rotations: " + previousRotations);
+
+    //   previousRotations = rotations;
+
+    //   SetPosition m_setPosition = new SetPosition(rotations);
+    //   m_setPosition.schedule();
+    // }
+  }
 
   @Override
   public void teleopInit() {
