@@ -15,11 +15,11 @@ import com.revrobotics.CANSparkBase.IdleMode;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
-  public static class OPERATOR_CONSTANTS {
+  public static final class OPERATOR_CONSTANTS {
     public static final int K_DRIVER_CONTROLLER_PORT = 0;
   }
 
-  public static class CAN_ID {
+  public static final class CAN_ID {
     public static final int TOP_INTAKE_MOTOR_ID = 23;
     public static final int BOTTOM_INTAKE_MOTOR_ID = 24;
 
@@ -27,9 +27,14 @@ public final class Constants {
     public static final int BOTTOM_SHOOTER_MOTOR_ID = 26;
 
     public static final int PIVOT_MOTOR_ID = 29;
+
+    public static final int LEFT_ELEVATOR_MOTOR_ID = 25; // original: 31
+    public static final int RIGHT_ELEVATOR_MOTOR_ID = 32;
+
+    public static final int ROLLER_ID = 30;
   }
 
-  public static class SHOOTER {
+  public static final class SHOOTER {
     public static final IdleMode IDLE_MODE = IdleMode.kCoast;
 
     public static final boolean TOP_MOTOR_INVERTED = false;
@@ -67,7 +72,7 @@ public final class Constants {
     public static final int BOTTOM_MOTOR_FREE_LIMIT_AMPS = 60;
   }
 
-  public static class PIVOT {
+  public static final class PIVOT {
     public static final boolean MOTOR_INVERTED = true;
     public static final boolean ENCODER_INVERTED = false;
 
@@ -85,5 +90,26 @@ public final class Constants {
     public static final double PIVOT_I = 0;
     public static final double PIVOT_D = 0;
     public static final double PIVOT_FF = 0.00045; // Barely moving: .000465
+  }
+
+  public static final class ELEVATOR {
+    public static final boolean MOTOR_INVERTED = false;
+    
+    public static final IdleMode IDLE_MODE = IdleMode.kBrake;
+
+    public static final int MOTOR_STALL_LIMIT_AMPS = 60;
+    public static final int MOTOR_FREE_LIMIT_AMPS = 60;
+
+    public static final double ALLOWED_ERROR = 0;
+
+    public static final double PIVOT_P = 0.001;
+    public static final double PIVOT_I = 0.00000001;
+    public static final double PIVOT_D = 0;
+    public static final double PIVOT_I_ZONE = 0;
+    public static final double PIVOT_FF = 0;
+
+    public static final double MAX_VELOCITY = 2500;
+    public static final double MIN_OUTPUT_VELOCTIY = 0;
+    public static final double MAX_ACCELERATION = 1500;
   }
 }

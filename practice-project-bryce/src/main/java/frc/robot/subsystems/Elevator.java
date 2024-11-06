@@ -4,9 +4,9 @@ import com.revrobotics.CANSparkLowLevel;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.IdleMode;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.CAN_ID;
+import frc.robot.Constants.ELEVATOR;
 
 public class Elevator extends SubsystemBase {
     private CANSparkMax m_leftElevatorMotor;
@@ -18,32 +18,34 @@ public class Elevator extends SubsystemBase {
     private int smartMotionSlot = 0;
 
     public Elevator(){
-        m_leftElevatorMotor = new CANSparkMax(25, CANSparkLowLevel.MotorType.kBrushless);
+        m_leftElevatorMotor = new CANSparkMax(CAN_ID.LEFT_ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         m_leftPidController = m_leftElevatorMotor.getPIDController();
         m_leftEncoder = m_leftElevatorMotor.getEncoder();
 
-        m_rightElevatorMotor = new CANSparkMax(31, CANSparkLowLevel.MotorType.kBrushless);
+        m_rightElevatorMotor = new CANSparkMax(CAN_ID.RIGHT_ELEVATOR_MOTOR_ID, CANSparkLowLevel.MotorType.kBrushless);
         
         configure();
     }
 
     public void configure(){
-        m_leftElevatorMotor.setInverted(false);
+        m_leftElevatorMotor.setInverted(ELEVATOR.MOTOR_INVERTED);
         m_leftElevatorMotor.enableVoltageCompensation(12);
-        m_leftElevatorMotor.setIdleMode(IdleMode.kBrake);
-        m_leftElevatorMotor.setSmartCurrentLimit(60, 60);
+        m_leftElevatorMotor.setIdleMode(ELEVATOR.IDLE_MODE);
+        m_leftElevatorMotor.setSmartCurrentLimit(
+            ELEVATOR.MOTOR_STALL_LIMIT_AMPS, 
+            ELEVATOR.MOTOR_FREE_LIMIT_AMPS);
 
-        m_leftPidController.setP(0.001);
-        m_leftPidController.setI(0.00000001);
-        m_leftPidController.setD(0);
-        m_leftPidController.setIZone(0);
-        m_leftPidController.setFF(0);
+        m_leftPidController.setP(ELEVATOR.PIVOT_P);
+        m_leftPidController.setI(ELEVATOR.PIVOT_I);
+        m_leftPidController.setD(ELEVATOR.PIVOT_D);
+        m_leftPidController.setIZone(ELEVATOR.PIVOT_I_ZONE);
+        m_leftPidController.setFF(ELEVATOR.PIVOT_FF);
         m_leftPidController.setOutputRange(-0.5, 0.5);
         
-        m_leftPidController.setSmartMotionMaxVelocity(2500, smartMotionSlot);
-        m_leftPidController.setSmartMotionMinOutputVelocity(0, smartMotionSlot);
-        m_leftPidController.setSmartMotionMaxAccel(1500, smartMotionSlot);
-        m_leftPidController.setSmartMotionAllowedClosedLoopError(0, smartMotionSlot);
+        m_leftPidController.setSmartMotionMaxVelocity(ELEVATOR.MAX_VELOCITY, smartMotionSlot);
+        m_leftPidController.setSmartMotionMinOutputVelocity(ELEVATOR.MIN_OUTPUT_VELOCTIY, smartMotionSlot);
+        m_leftPidController.setSmartMotionMaxAccel(ELEVATOR.MAX_ACCELERATION, smartMotionSlot);
+        m_leftPidController.setSmartMotionAllowedClosedLoopError(ELEVATOR.ALLOWED_ERROR, smartMotionSlot);
 
         m_rightElevatorMotor.follow(m_leftElevatorMotor);
     }
