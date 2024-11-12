@@ -22,6 +22,7 @@ public class Pivot extends SubsystemBase {
         m_pivotMotor = new CANSparkMax(25, CANSparkLowLevel.MotorType.kBrushless);
         m_pidController = m_pivotMotor.getPIDController();
         m_encoder = m_pivotMotor.getEncoder();
+        
         configure();
     }
 
