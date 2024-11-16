@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
@@ -10,12 +6,12 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkPIDController;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CAN_ID;
 import frc.robot.Constants.SHOOTER;
+import frc.robot.subsystems.bases.SmartDashboardSubsystemBase;
 
 /** A subsystem used to control the shooter part of the ping pong launcher. */
-public final class Shooter extends SubsystemBase {
+public final class Shooter extends SmartDashboardSubsystemBase {
   private CANSparkMax m_leftShooterMotor;
   private SparkPIDController m_leftPidController;
   private RelativeEncoder m_leftEncoder;
@@ -28,8 +24,9 @@ public final class Shooter extends SubsystemBase {
     m_leftPidController = m_leftShooterMotor.getPIDController();
     m_leftEncoder = m_leftShooterMotor.getEncoder();
 
-    // m_rightShooterMotor = new CANSparkMax(CAN_ID.RIGHT_SHOOTER_MOTOR_ID, MotorType.kBrushless);
-
+    // m_rightShooterMotor = new CANSparkMax(CAN_ID.RIGHT_SHOOTER_MOTOR_ID,
+    // MotorType.kBrushless);
+    
     configure();
   }
 
@@ -49,7 +46,8 @@ public final class Shooter extends SubsystemBase {
     m_leftPidController.setFF(SHOOTER.LEFT_MOTOR_FF);
     m_leftPidController.setOutputRange(-1, 1);
 
-    // m_rightShooterMotor.follow(m_leftShooterMotor, SHOOTER.RIGHT_MOTOR_INVERTED_FROM_LEFT);
+    // m_rightShooterMotor.follow(m_leftShooterMotor,
+    // SHOOTER.RIGHT_MOTOR_INVERTED_FROM_LEFT);
   }
 
   /**
@@ -77,7 +75,7 @@ public final class Shooter extends SubsystemBase {
   }
 
   @Override
-  public void periodic() {
+  public void smartDashboardPeriodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Shooter RPM", getVelocity());
   }

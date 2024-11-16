@@ -17,6 +17,8 @@ public abstract class SmartDashboardSubsystemBase extends SubsystemBase {
     /** 
      * This method is only called periodically by the {@link CommandScheduler} when {@link Constants#USE_SMART_DASHBOARD} is enabled.
      * Useful for updating subsystem-specific states with the {@link SmartDashboard} under a special condition.
+     * @see SmartDashboard
+     * @see SubsystemBase#periodic()
     */
     public void smartDashboardPeriodic() {}
 }

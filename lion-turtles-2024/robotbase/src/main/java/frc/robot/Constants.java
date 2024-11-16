@@ -17,11 +17,19 @@ import com.revrobotics.CANSparkBase.IdleMode;
 public final class Constants {
   public static final class OPERATOR_CONSTANTS {
     public static final int K_DRIVER_CONTROLLER_PORT = 0;
+
+    private OPERATOR_CONSTANTS() {
+      throw new UnsupportedOperationException("This is a constants class!");
+    }
   }
 
   public static final class CAN_ID {
     public static final int LEFT_SHOOTER_MOTOR_ID = 0;
     public static final int RIGHT_SHOOTER_MOTOR_ID = 0;
+
+    private CAN_ID() {
+      throw new UnsupportedOperationException("This is a constants class!");
+    }
   }
 
   public static final class SHOOTER {
@@ -50,5 +58,15 @@ public final class Constants {
     // public static final double RIGHT_MOTOR_D = 0.0;
     // public static final double RIGHT_MOTOR_I_ZONE = 0.0;
     // public static final double RIGHT_MOTOR_FF = 0.00018;
+
+    private SHOOTER() {
+      throw new UnsupportedOperationException("This is a constants class!");
+    }
+  }
+
+  public static final boolean USE_SMART_DASHBOARD = true;
+
+  private Constants() {
+    throw new UnsupportedOperationException("This is a constants class!");
   }
 }

@@ -1,20 +1,16 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.shooter;
 
 import frc.robot.Robot;
 import edu.wpi.first.wpilibj2.command.Command;
 
-/** An example command that uses an example subsystem. */
+/** A command that uses the Shooter subsystem. */
 public class ShooterRun extends Command {
   private double m_velocity;
-
+  
   /**
    * Creates a new Shooter command.
    *
-   * @param rpm The velocity to set the shooter at.
+   * @param rpm The velocity to set the shooter at in RPM.
    */
   public ShooterRun(double rpm) {
     m_velocity = rpm;
