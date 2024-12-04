@@ -22,7 +22,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
-  private final RobotContainer m_robotContainer;
+  private static RobotContainer m_robotContainer;
 
   public static CommandSwerveDrivetrain swerve;
   public static RobotState state;
@@ -32,11 +32,14 @@ public class Robot extends TimedRobot {
   private Command m_allianceGetter;
   private Command m_forceGyroZero;
 
-  public Robot() {
-    m_robotContainer = new RobotContainer();
+
+  @Override
+  public void robotInit(){
     swerve = TunerConstants.createDrivetrain();
     state = new RobotState();
     driverControls = new DriverControls(new XboxController(CONTROLLER.DRIVE_CONTROLLER_PORT), CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+
+    m_robotContainer = new RobotContainer();
 
     m_setCoastOnDisable = new SetCoastOnDisable();
     m_setCoastOnDisable.schedule();
