@@ -4,17 +4,46 @@
 
 package frc.robot;
 
+import org.opencv.features2d.MSER;
+
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.CONTROLLER;
+import frc.robot.commands.drive.ForceGyroZero;
+import frc.robot.commands.drive.SetCoastOnDisable;
+import frc.robot.commands.state.GetAlliance;
+import frc.robot.controls.DriverControls;
+import frc.robot.generated.TunerConstants;
+import frc.robot.state.RobotState;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
 
+  public static CommandSwerveDrivetrain swerve;
+  public static RobotState state;
+  public static DriverControls driverControls;
+
+  private Command m_setCoastOnDisable;
+  private Command m_allianceGetter;
+  private Command m_forceGyroZero;
+
   public Robot() {
     m_robotContainer = new RobotContainer();
+    swerve = TunerConstants.createDrivetrain();
+    state = new RobotState();
+    driverControls = new DriverControls(new XboxController(CONTROLLER.DRIVE_CONTROLLER_PORT), CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+
+    m_setCoastOnDisable = new SetCoastOnDisable();
+    m_setCoastOnDisable.schedule();
+    m_allianceGetter = new GetAlliance();
+    m_allianceGetter.schedule();
+    m_forceGyroZero = new ForceGyroZero();
+    m_forceGyroZero.schedule();
   }
 
   @Override

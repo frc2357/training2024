@@ -5,14 +5,21 @@ import static edu.wpi.first.units.Units.*;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.fasterxml.jackson.databind.util.RootNameLookup;
 
 import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -22,6 +29,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -43,6 +51,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final SwerveRequest.SysIdSwerveTranslation m_translationCharacterization = new SwerveRequest.SysIdSwerveTranslation();
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
+
+    private final SwerveRequest.ApplyRobotSpeeds robotRelative = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyFieldSpeeds fieldRelative = new SwerveRequest.ApplyFieldSpeeds();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -198,6 +209,111 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
      */
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
+    }
+
+    /**
+     * The method to use for robot relative driving.
+     *
+     * @param velocityXSpeedMetersPerSecond The desired speed on the X axis in meters per second.
+     * @param velocityYSpeedMetersPerSecond The desired speed on the X axis in meters per second.
+     * @param rotationRateRadiansPerSecond The desired rotation rate in radians per second.
+     */
+    public void driveRobotRelative(
+        double velocityXMetersPerSecond,
+        double velocityYMetersPerSecond,
+        double rotationRateRadiansPerSecond) {
+        setControl(
+                robotRelative.withSpeeds(new ChassisSpeeds(
+                    velocityXMetersPerSecond, velocityYMetersPerSecond, rotationRateRadiansPerSecond)));
+    }
+
+    /**
+     * The method to use for field relative driving.
+     *
+     * @param velocityXSpeedMetersPerSecond The desired speed on the X axis in meters per second.
+     * @param velocityYSpeedMetersPerSecond The desired speed on the X axis in meters per second.
+     * @param rotationRateRadiansPerSecond The desired rotation rate in radians per second.
+     */
+    public void driveFieldRelative(
+        double velocityXMetersPerSecond,
+        double velocityYMetersPerSecond,
+        double rotationRateRadiansPerSecond) {
+        setControl(
+                fieldRelative.withSpeeds(new ChassisSpeeds(
+                    velocityXMetersPerSecond, velocityYMetersPerSecond, rotationRateRadiansPerSecond)));
+    }
+
+    /**
+     * DO NOT USE THIS OUTSIDE OF AUTO DRIVING! This is intended for Choreo only!
+     */
+    public void autonDriveWithFeedForward(ChassisSpeeds speeds) {
+        SwerveModuleState[] moduleStates = getKinematics().toSwerveModuleStates(speeds);
+        for (SwerveModuleState state : moduleStates) {
+        state.speedMetersPerSecond += Constants.SWERVE.STATIC_FEEDFORWARD.baseUnitMagnitude();
+        }
+        setControl(robotRelative.withSpeeds(getKinematics().toChassisSpeeds(moduleStates)));
+    }
+
+    
+    /**
+     * @return A list of module positions in the order Front Left, Front Right, Back Left, Back Right
+     */
+    public Translation2d[] getModulePositions() {
+        return super.getModuleLocations();
+    }
+
+    /**
+     * @return A list of module states in the order Front Left, Front Right, Back Left, Back Right
+     */
+    public SwerveModuleState[] getModuleStates() {
+        return super.getState().ModuleStates;
+    }
+
+    /**
+     * @return A list of module targets in the order Front Left, Front Right, Back Left, Back Right
+     */
+    public SwerveModuleState[] getModuleTargets() {
+        return super.getState().ModuleTargets;
+    }
+
+    public void zeroGyro(boolean flip) {
+        StatusCode code = super.getPigeon2().setYaw(flip ? 180 : 0);
+        System.out.println("[GYRO] Zeroed to " + (flip ? 180 : 0) + ": " + code.toString());
+    }
+
+    public double getYaw() {
+        return getPigeon2().getYaw().getValueAsDouble();
+    }
+    
+      // Pigeon is rotated 90 degrees so pitch and roll are flipped
+      public double getRoll() {
+        return getPigeon2().getPitch().getValueAsDouble();
+    }
+    
+      // Pigeon is rotated 90 degrees so pitch and roll are flipped
+      public double getPitch() {
+        return getPigeon2().getRoll().getValueAsDouble();
+    }
+
+    public void stopMotorsIntoX() {
+        setControl(new SwerveRequest.SwerveDriveBrake());
+    }
+
+    /** Stops the motors in a way that should make them not jingle. */
+    public void stopMotors() {
+        driveFieldRelative(0, 0, 0);
+        for (SwerveModule module : super.getModules()) {
+        module.getDriveMotor().stopMotor(); // anti-jingle
+        module.getSteerMotor().stopMotor(); // remove to bring back the jingle (dont do it)
+        }
+    }
+
+    public Pose2d getPose2d(){
+        return super.getState().Pose;
+    }
+    
+    public void setPose2d(Pose2d poseToSet){
+        super.resetPose(poseToSet);
     }
 
     @Override
