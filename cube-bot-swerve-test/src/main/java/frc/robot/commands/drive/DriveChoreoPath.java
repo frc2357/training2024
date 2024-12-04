@@ -9,6 +9,7 @@ import choreo.trajectory.Trajectory;
 import choreo.trajectory.TrajectorySample;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.CHOREO;
@@ -121,19 +122,22 @@ public class DriveChoreoPath extends SequentialCommandGroup {
   /**
    * This runs the path with no triggers, and should allow use of the triggers API in other sections of the path.
    */
-  public void noTriggers(){
+  public SequentialCommandGroup noTriggers(){
     addCommands( 
       new InstantCommand(
         () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)),
         m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.voidLoop()).cmd()
-    );//this should run it in a
-  //compatible way, so we can choose to use the trigger API for some sections, and not for others in a single path.
+    );// adds the paths command to this command group, and returns it so it can be scheduled.
+    return this; // returns the DriveChoreoPath SequentialCommandGroup
   }
 
-  public AutoTrajectory withTriggers(){
+  public AutoTrajectory withTriggers(){ 
     addCommands(new InstantCommand(
         () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)));
-    return m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.newLoop(m_pathName));
+    var autoTraj = m_autoFactory.trajectory(m_pathName, m_splitIndex, m_autoFactory.newLoop(m_pathName));
+    autoTraj.atTime(0).onTrue(this); // adds the DriveChoreoPath SequentialCommandGroup
+      // as a trigger to the start of the AutoTrajectory via triggers. no clue if this works.
+    return autoTraj;
   }
 
   @Override

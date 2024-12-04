@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.drive.DriveChoreoPath;
 import frc.robot.commands.util.VariableWaitCommand;
 
 public class AutoCommandChooser {
@@ -22,15 +23,7 @@ public class AutoCommandChooser {
 
   public AutoCommandChooser() {
     Command[] autoCommands = {
-      // new SourceSide4Note(),
-      // new SourceSide3NoteNoStage(),
-      // new AmpSide4Note(),
-      // new AmpSide4NoteWallFirst(),
-      // new Close3AndRUN(),
-      // new Close3AndMiddleCenterline(),
-      // new AntiCitrus(),
-      // new AmpSideBranchingPath(),
-      // new SourceSideBranchingPath(),
+      new DriveChoreoPath("Cube test path").noTriggers()
     };
 
     HashMap<String, Command> commandMap = new HashMap<String, Command>(autoCommands.length + 1);
