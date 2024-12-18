@@ -23,7 +23,7 @@ public class AutoCommandChooser {
 
   public AutoCommandChooser() {
     Command[] autoCommands = {
-      new DriveChoreoPath("Cube test path").noTriggers()
+      new DriveChoreoPath("Cube test path", 0, true)
     };
 
     HashMap<String, Command> commandMap = new HashMap<String, Command>(autoCommands.length + 1);

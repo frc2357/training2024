@@ -4,13 +4,23 @@
 
 package frc.robot;
 
-import org.opencv.features2d.MSER;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import choreo.auto.AutoChooser;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.Constants.CHOREO;
 import frc.robot.Constants.CONTROLLER;
+import frc.robot.commands.auto.CubeTestPath;
 import frc.robot.commands.drive.ForceGyroZero;
 import frc.robot.commands.drive.SetCoastOnDisable;
 import frc.robot.commands.state.GetAlliance;
@@ -27,18 +37,21 @@ public class Robot extends TimedRobot {
   public static CommandSwerveDrivetrain swerve;
   public static RobotState state;
   public static DriverControls driverControls;
+  public static AutoChooser autoChooser;
 
   private Command m_setCoastOnDisable;
   private Command m_allianceGetter;
   private Command m_forceGyroZero;
 
+  private Map<String, Command> m_autoCommandsToBind = Map.of(
+    
+  );
 
   @Override
   public void robotInit(){
     swerve = TunerConstants.createDrivetrain();
     state = new RobotState();
     driverControls = new DriverControls(new XboxController(CONTROLLER.DRIVE_CONTROLLER_PORT), CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
-
     m_robotContainer = new RobotContainer();
 
     m_setCoastOnDisable = new SetCoastOnDisable();
@@ -47,11 +60,14 @@ public class Robot extends TimedRobot {
     m_allianceGetter.schedule();
     m_forceGyroZero = new ForceGyroZero();
     m_forceGyroZero.schedule();
+
+    DriverStation.silenceJoystickConnectionWarning(true); // TODO: remove this if its a match
+
   }
 
   @Override
   public void robotPeriodic() {
-    CommandScheduler.getInstance().run(); 
+    CommandScheduler.getInstance().run();
   }
 
   @Override
@@ -65,6 +81,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
+    m_forceGyroZero.cancel();
+    m_setCoastOnDisable.cancel();
+    Robot.swerve.configNeutralMode(NeutralModeValue.Brake);
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     if (m_autonomousCommand != null) {
@@ -80,6 +99,11 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+     m_forceGyroZero.cancel();
+
+    // Robot.swerve.setGyroOffset();
+    m_setCoastOnDisable.cancel(); // very important, no touchy
+    Robot.swerve.configNeutralMode(NeutralModeValue.Brake); // see above
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }

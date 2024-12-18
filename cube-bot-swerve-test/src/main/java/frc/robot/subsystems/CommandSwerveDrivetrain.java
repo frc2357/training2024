@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.*;
+import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Volts;
 
 import java.util.function.Supplier;
 
@@ -12,8 +13,7 @@ import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
-import com.fasterxml.jackson.databind.util.RootNameLookup;
-
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -29,7 +29,7 @@ import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
-import frc.robot.Constants;
+import frc.robot.Constants.CHOREO;
 
 /**
  * Class that extends the Phoenix 6 SwerveDrivetrain class and implements
@@ -52,8 +52,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
-    private final SwerveRequest.ApplyRobotSpeeds robotRelative = new SwerveRequest.ApplyRobotSpeeds();
-    private final SwerveRequest.ApplyFieldSpeeds fieldRelative = new SwerveRequest.ApplyFieldSpeeds();
+    private final SwerveRequest.ApplyRobotSpeeds m_robotRelative = new SwerveRequest.ApplyRobotSpeeds();
+    private final SwerveRequest.ApplyFieldSpeeds m_fieldRelative = new SwerveRequest.ApplyFieldSpeeds();
 
     /* SysId routine for characterizing translation. This is used to find PID gains for the drive motors. */
     private final SysIdRoutine m_sysIdRoutineTranslation = new SysIdRoutine(
@@ -223,7 +223,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         double velocityYMetersPerSecond,
         double rotationRateRadiansPerSecond) {
         setControl(
-                robotRelative.withSpeeds(new ChassisSpeeds(
+                m_robotRelative.withSpeeds(new ChassisSpeeds(
                     velocityXMetersPerSecond, velocityYMetersPerSecond, rotationRateRadiansPerSecond)));
     }
 
@@ -239,19 +239,31 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         double velocityYMetersPerSecond,
         double rotationRateRadiansPerSecond) {
         setControl(
-                fieldRelative.withSpeeds(new ChassisSpeeds(
+                m_fieldRelative.withSpeeds(new ChassisSpeeds(
                     velocityXMetersPerSecond, velocityYMetersPerSecond, rotationRateRadiansPerSecond)));
     }
 
-    /**
-     * DO NOT USE THIS OUTSIDE OF AUTO DRIVING! This is intended for Choreo only!
-     */
-    public void autonDriveWithFeedForward(ChassisSpeeds speeds) {
-        SwerveModuleState[] moduleStates = getKinematics().toSwerveModuleStates(speeds);
-        for (SwerveModuleState state : moduleStates) {
-        state.speedMetersPerSecond += Constants.SWERVE.STATIC_FEEDFORWARD.baseUnitMagnitude();
-        }
-        setControl(robotRelative.withSpeeds(getKinematics().toChassisSpeeds(moduleStates)));
+    public void followChoreoPath(Pose2d pose2d, SwerveSample sample){
+        Pose2d pose = getPose2d(); //TODO: remove the pose2d paramater when Choreo allows it.
+
+        CHOREO.ROTATION_CONTROLLER.enableContinuousInput(-Math.PI, Math.PI);
+
+        var targetSpeeds = sample.getChassisSpeeds();
+        targetSpeeds.vxMetersPerSecond += CHOREO.X_CONTROLLER.calculate(
+            pose.getX(), sample.x
+        );
+        targetSpeeds.vyMetersPerSecond += CHOREO.Y_CONTROLLER.calculate(
+            pose.getY(), sample.y
+        );
+        targetSpeeds.omegaRadiansPerSecond += CHOREO.ROTATION_CONTROLLER.calculate(
+            pose.getRotation().getRadians(), sample.heading
+        );
+        System.out.println("[followChoreoPath] TARGET SPEEDS: " + targetSpeeds.toString());
+        setControl(
+            m_fieldRelative.withSpeeds(targetSpeeds)
+                .withWheelForceFeedforwardsX(sample.moduleForcesX())
+                .withWheelForceFeedforwardsY(sample.moduleForcesY())
+        );
     }
 
     

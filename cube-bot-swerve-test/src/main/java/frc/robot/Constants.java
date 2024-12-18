@@ -6,6 +6,11 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.function.BooleanSupplier;
 
+import choreo.Choreo;
+import choreo.auto.AutoFactory;
+import choreo.auto.AutoFactory.AutoBindings;
+import choreo.auto.AutoLoop;
+import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.AngularVelocity;
 import edu.wpi.first.units.measure.Distance;
@@ -50,5 +55,22 @@ public final class Constants {
               return Robot.state.getAlliance() == Alliance.Red;
             }
           };
+      
+      public static final AutoBindings AUTO_BINDINGS = new AutoBindings();
+      // public static final AutoFactory AUTO_FACTORY =  Choreo.<SwerveSample>createAutoFactory(
+      //   Robot.swerve::getPose2d, 
+      //   Robot.swerve::followChoreoPath, 
+      //   CHOREO_AUTO_MIRROR_PATHS,
+      //   Robot.swerve, 
+      //   AUTO_BINDINGS
+      // ); // for later beta. keep this.
+      public static final AutoFactory AUTO_FACTORY =  Choreo.<SwerveSample>createAutoFactory(
+        Robot.swerve, 
+        Robot.swerve::getPose2d, 
+        Robot.swerve::followChoreoPath, 
+        CHOREO_AUTO_MIRROR_PATHS,
+        AUTO_BINDINGS
+      );
+      public static final AutoLoop AUTO_LOOP = AUTO_FACTORY.newLoop("Auto Loop");
     }
 }

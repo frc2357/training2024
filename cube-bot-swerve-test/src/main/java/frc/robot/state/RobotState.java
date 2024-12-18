@@ -1,7 +1,6 @@
 package frc.robot.state;
 
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Robot;
 
 public class RobotState {
   public static enum State {
