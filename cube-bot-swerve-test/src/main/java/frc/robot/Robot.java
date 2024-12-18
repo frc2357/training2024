@@ -47,8 +47,7 @@ public class Robot extends TimedRobot {
     
   );
 
-  @Override
-  public void robotInit(){
+  public Robot(){
     swerve = TunerConstants.createDrivetrain();
     state = new RobotState();
     driverControls = new DriverControls(new XboxController(CONTROLLER.DRIVE_CONTROLLER_PORT), CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
@@ -62,7 +61,6 @@ public class Robot extends TimedRobot {
     m_forceGyroZero.schedule();
 
     DriverStation.silenceJoystickConnectionWarning(true); // TODO: remove this if its a match
-
   }
 
   @Override
