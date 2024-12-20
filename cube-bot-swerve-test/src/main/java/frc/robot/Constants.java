@@ -9,7 +9,6 @@ import java.util.function.BooleanSupplier;
 import choreo.Choreo;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoFactory.AutoBindings;
-import choreo.auto.AutoLoop;
 import choreo.trajectory.SwerveSample;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.units.measure.AngularVelocity;
@@ -57,20 +56,13 @@ public final class Constants {
           };
       
       public static final AutoBindings AUTO_BINDINGS = new AutoBindings();
-      // public static final AutoFactory AUTO_FACTORY =  Choreo.<SwerveSample>createAutoFactory(
-      //   Robot.swerve::getPose2d, 
-      //   Robot.swerve::followChoreoPath, 
-      //   CHOREO_AUTO_MIRROR_PATHS,
-      //   Robot.swerve, 
-      //   AUTO_BINDINGS
-      // ); // for later beta. keep this.
-      public static final AutoFactory AUTO_FACTORY =  Choreo.<SwerveSample>createAutoFactory(
-        Robot.swerve, 
+      public static final AutoFactory AUTO_FACTORY =  new AutoFactory(
         Robot.swerve::getPose2d, 
+        Robot.swerve::setPose2d, 
         Robot.swerve::followChoreoPath, 
-        CHOREO_AUTO_MIRROR_PATHS,
+        true, 
+        Robot.swerve, 
         AUTO_BINDINGS
       );
-      public static final AutoLoop AUTO_LOOP = AUTO_FACTORY.newLoop("Auto Loop");
     }
 }

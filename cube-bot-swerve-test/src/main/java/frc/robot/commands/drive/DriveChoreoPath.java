@@ -67,13 +67,12 @@ public class DriveChoreoPath extends SequentialCommandGroup {
     m_targetLock = targetLock;
     m_splitIndex = splitIndex;
     m_pathName = trajectoryFileName.contains(".") ? trajectoryFileName.split(".")[0] : trajectoryFileName;
-    // m_traj = CHOREO.AUTO_FACTORY.newRoutine("test").trajectory(trajectoryFileName).getRawTrajectory(); // Loads choreo file into trajctory object
-    m_traj = CHOREO.AUTO_FACTORY.trajectory(m_pathName, CHOREO.AUTO_LOOP);
+    // m_traj = CHOREO.AUTO_FACTORY.trajectory(m_pathName, CHOREO.AUTO_LOOP);
     addCommands(
         new InstantCommand(
           () -> {
             // m_startingState = m_traj.getInitialSample(CHOREO.CHOREO_AUTO_MIRROR_PATHS.getAsBoolean()).get();
-            // m_startingPose = m_startingState.getPose(); // TODO: for later Choreo beta
+            // m_startingPose = m_startingState.getPose();
             m_startingPose = m_traj.getInitialPose().get();
           }
         ));
@@ -96,17 +95,17 @@ public class DriveChoreoPath extends SequentialCommandGroup {
     //                 m_startingState.getChassisSpeeds().vxMetersPerSecond,
     //                 m_startingState.getChassisSpeeds().vyMetersPerSecond,
     //                 m_startingState.getChassisSpeeds().omegaRadiansPerSecond))
-    // ); // TODO: for later Choreo beta. sits here until its back.
+    // );
 
     
-    addCommands(new InstantCommand(() -> {
-      System.out.println("[DriveChoreoPath] CURRENT POSE V STARTING POSE: " + Robot.swerve.getPose2d() + " | " + m_startingPose);
-    }));
-    addCommands( 
-    new InstantCommand(
-      () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)),
-      CHOREO.AUTO_FACTORY.trajectoryCommand(m_pathName)
-    );
+    // addCommands(new InstantCommand(() -> {
+    //   System.out.println("[DriveChoreoPath] CURRENT POSE V STARTING POSE: " + Robot.swerve.getPose2d() + " | " + m_startingPose);
+    // }));
+    // addCommands( 
+    // new InstantCommand(
+    //   () -> System.out.println("[DriveChoreoPath] RUNNING PATH: " + m_pathName)),
+    //   CHOREO.AUTO_FACTORY.trajectoryCommand(m_pathName)
+    // );
   }
 
     // /**

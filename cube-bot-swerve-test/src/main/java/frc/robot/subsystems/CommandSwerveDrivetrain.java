@@ -243,9 +243,9 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                     velocityXMetersPerSecond, velocityYMetersPerSecond, rotationRateRadiansPerSecond)));
     }
 
-    public void followChoreoPath(Pose2d pose2d, SwerveSample sample){
-        Pose2d pose = getPose2d(); //TODO: remove the pose2d paramater when Choreo allows it.
-
+    public void followChoreoPath(SwerveSample sample){
+        Pose2d pose = getPose2d();
+        System.out.println("ran");//TODO: remove this
         CHOREO.ROTATION_CONTROLLER.enableContinuousInput(-Math.PI, Math.PI);
 
         var targetSpeeds = sample.getChassisSpeeds();
@@ -258,7 +258,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         targetSpeeds.omegaRadiansPerSecond += CHOREO.ROTATION_CONTROLLER.calculate(
             pose.getRotation().getRadians(), sample.heading
         );
-        System.out.println("[followChoreoPath] TARGET SPEEDS: " + targetSpeeds.toString());
         setControl(
             m_fieldRelative.withSpeeds(targetSpeeds)
                 .withWheelForceFeedforwardsX(sample.moduleForcesX())
@@ -325,7 +324,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
     
     public void setPose2d(Pose2d poseToSet){
-        super.resetPose(poseToSet);
+      super.resetPose(poseToSet);
     }
 
     @Override

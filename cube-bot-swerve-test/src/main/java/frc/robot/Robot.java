@@ -5,19 +5,25 @@
 package frc.robot;
 
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import choreo.Choreo;
 import choreo.auto.AutoChooser;
+import choreo.auto.AutoRoutine;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableBuilderImpl;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.CHOREO;
 import frc.robot.Constants.CONTROLLER;
 import frc.robot.commands.auto.CubeTestPath;
@@ -43,14 +49,14 @@ public class Robot extends TimedRobot {
   private Command m_allianceGetter;
   private Command m_forceGyroZero;
 
-  private Map<String, Command> m_autoCommandsToBind = Map.of(
-    
-  );
+  private Map<String, Command> m_autoCommandsToBind;
+  private Map<String, AutoRoutine> m_autoRoutinesToBind;
 
   public Robot(){
     swerve = TunerConstants.createDrivetrain();
     state = new RobotState();
     driverControls = new DriverControls(new XboxController(CONTROLLER.DRIVE_CONTROLLER_PORT), CONTROLLER.DRIVE_CONTROLLER_DEADBAND);
+    autoChooser = new AutoChooser();
     m_robotContainer = new RobotContainer();
 
     m_setCoastOnDisable = new SetCoastOnDisable();
@@ -59,7 +65,20 @@ public class Robot extends TimedRobot {
     m_allianceGetter.schedule();
     m_forceGyroZero = new ForceGyroZero();
     m_forceGyroZero.schedule();
+    SendableBuilderImpl autoChooserBuilder = new SendableBuilderImpl();
+    autoChooserBuilder.setTable(NetworkTableInstance.getDefault().getTable("SmartDashboard/Auto chooser"));
+    autoChooser.initSendable(autoChooserBuilder);
+    m_autoCommandsToBind = Map.of(
+    
+    );
+    m_autoRoutinesToBind = Map.of(
+      "CubeTestPath", new CubeTestPath().getRoutine()
+    );
 
+    m_autoCommandsToBind.forEach((String name, Command command) -> {autoChooser.addCmd(name, () -> command);});
+    m_autoRoutinesToBind.forEach((String name, AutoRoutine routine) -> {autoChooser.addRoutine(name, () -> routine);});
+    
+    SmartDashboard.putData("Auto chooser", autoChooser);
     DriverStation.silenceJoystickConnectionWarning(true); // TODO: remove this if its a match
   }
 
@@ -82,15 +101,16 @@ public class Robot extends TimedRobot {
     m_forceGyroZero.cancel();
     m_setCoastOnDisable.cancel();
     Robot.swerve.configNeutralMode(NeutralModeValue.Brake);
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
-
-    if (m_autonomousCommand != null) {
-      m_autonomousCommand.schedule();
+    m_autonomousCommand = autoChooser.selectedCommandScheduler();
+    if(m_autonomousCommand != null){
+      System.out.println("AUTO COMMAND NAME:" + m_autonomousCommand.getName());
+      new CubeTestPath().getCommand().schedule();
     }
   }
 
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+  }
 
   @Override
   public void autonomousExit() {}
