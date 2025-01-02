@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.CHOREO;
 import frc.robot.Constants.CONTROLLER;
+import frc.robot.commands.auto.Autos;
 import frc.robot.commands.auto.CubeTestPath;
 import frc.robot.commands.drive.ForceGyroZero;
 import frc.robot.commands.drive.SetCoastOnDisable;
@@ -45,6 +46,8 @@ public class Robot extends TimedRobot {
   public static DriverControls driverControls;
   public static AutoChooser autoChooser;
 
+  private Autos m_autos;
+
   private Command m_setCoastOnDisable;
   private Command m_allianceGetter;
   private Command m_forceGyroZero;
@@ -59,6 +62,8 @@ public class Robot extends TimedRobot {
     autoChooser = new AutoChooser();
     m_robotContainer = new RobotContainer();
 
+    m_autos = new Autos();
+
     m_setCoastOnDisable = new SetCoastOnDisable();
     m_setCoastOnDisable.schedule();
     m_allianceGetter = new GetAlliance();
@@ -72,7 +77,7 @@ public class Robot extends TimedRobot {
     
     );
     m_autoRoutinesToBind = Map.of(
-      "CubeTestPath", new CubeTestPath().getRoutine()
+      "CubeTestPath", m_autos.cubeTestPath()
     );
 
     m_autoCommandsToBind.forEach((String name, Command command) -> {autoChooser.addCmd(name, () -> command);});
@@ -104,7 +109,7 @@ public class Robot extends TimedRobot {
     m_autonomousCommand = autoChooser.selectedCommandScheduler();
     if(m_autonomousCommand != null){
       System.out.println("AUTO COMMAND NAME:" + m_autonomousCommand.getName());
-      new CubeTestPath().getCommand().schedule();
+      m_autonomousCommand.schedule();
     }
   }
 
