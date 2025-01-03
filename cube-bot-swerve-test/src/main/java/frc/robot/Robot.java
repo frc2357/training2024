@@ -9,7 +9,6 @@ import java.util.Map;
 
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import choreo.Choreo;
 import choreo.auto.AutoChooser;
 import choreo.auto.AutoRoutine;
 import edu.wpi.first.networktables.NetworkTable;
