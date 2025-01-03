@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableBuilderImpl;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import frc.robot.Constants.CHOREO;
 import frc.robot.Constants.CONTROLLER;
@@ -70,6 +71,7 @@ public class Robot extends TimedRobot {
     m_allianceGetter.schedule();
     m_forceGyroZero = new ForceGyroZero();
     m_forceGyroZero.schedule();
+    
     SendableBuilderImpl autoChooserBuilder = new SendableBuilderImpl();
     autoChooserBuilder.setTable(NetworkTableInstance.getDefault().getTable("SmartDashboard/Auto chooser"));
     autoChooser.initSendable(autoChooserBuilder);
@@ -84,6 +86,9 @@ public class Robot extends TimedRobot {
     m_autoRoutinesToBind.forEach((String name, AutoRoutine routine) -> {autoChooser.addRoutine(name, () -> routine);});
     
     SmartDashboard.putData("Auto chooser", autoChooser);
+    SmartDashboard.putNumber("wait seconds", 0.0);
+    System.out.println("*******************EXISTS: " + SmartDashboard.containsKey("wait1234"));
+
     DriverStation.silenceJoystickConnectionWarning(true); // TODO: remove this if its a match
   }
 

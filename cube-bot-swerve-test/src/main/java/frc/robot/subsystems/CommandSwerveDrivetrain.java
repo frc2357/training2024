@@ -245,7 +245,6 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public void followChoreoPath(SwerveSample sample){
         Pose2d pose = getPose2d();
-        System.out.println("ran");//TODO: remove this
         CHOREO.ROTATION_CONTROLLER.enableContinuousInput(-Math.PI, Math.PI);
 
         var targetSpeeds = sample.getChassisSpeeds();
