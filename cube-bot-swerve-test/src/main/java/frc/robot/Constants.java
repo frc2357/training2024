@@ -6,6 +6,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.spark.config.SparkMaxConfig;
+
 import choreo.Choreo;
 import choreo.auto.AutoFactory;
 import choreo.auto.AutoFactory.AutoBindings;
@@ -17,11 +19,10 @@ import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 public final class Constants {
+
   public static final class CAN_ID {
-    public static final class Elevator {
-      public static final int LEFT_MOTOR = -1;
-      public static final int RIGHT_MOTOR = -1;
-    }
+    public static final int ELEVATOR_LEFT_MOTOR = -1;
+    public static final int ELEVATOR_RIGHT_MOTOR = -1;
   }
 
   public static final class SWERVE {
