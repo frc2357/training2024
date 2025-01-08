@@ -40,7 +40,7 @@ public class Elevator extends SubsystemBase {
 
     public void setSpeed(double speed) {
         m_motorLeft.set(speed);
-        m_motorRight.set(-speed);
+        m_motorRight.set(speed);
 
     }
 
