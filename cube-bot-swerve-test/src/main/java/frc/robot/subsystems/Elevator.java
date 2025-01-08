@@ -44,4 +44,9 @@ public class Elevator extends SubsystemBase {
 
     }
 
+    public void stop() {
+        m_motorLeft.stopMotor();
+        m_motorRight.stopMotor();
+    }
+
 }
