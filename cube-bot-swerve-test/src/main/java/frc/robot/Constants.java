@@ -6,6 +6,8 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
 import choreo.Choreo;
@@ -23,6 +25,18 @@ public final class Constants {
   public static final class CAN_ID {
     public static final int ELEVATOR_LEFT_MOTOR = -1;
     public static final int ELEVATOR_RIGHT_MOTOR = -1;
+  }
+
+  public static final class ELEVATOR {
+
+    public static final SparkBaseConfig LEFT_MOTOR_CONFIG = new SparkMaxConfig()
+        .idleMode(IdleMode.kBrake)
+        .inverted(false);
+
+    public static final SparkBaseConfig RIGHT_MOTOR_CONFIG = new SparkMaxConfig()
+        .idleMode(IdleMode.kBrake)
+        .inverted(true);
+
   }
 
   public static final class SWERVE {
