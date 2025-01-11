@@ -6,9 +6,12 @@ import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.function.BooleanSupplier;
 
+import com.revrobotics.spark.config.ClosedLoopConfig;
+import com.revrobotics.spark.config.MAXMotionConfig;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.MAXMotionConfig.MAXMotionPositionMode;
 
 import choreo.Choreo;
 import choreo.auto.AutoFactory;
@@ -29,13 +32,33 @@ public final class Constants {
 
   public static final class ELEVATOR {
 
-    public static final SparkBaseConfig LEFT_MOTOR_CONFIG = new SparkMaxConfig()
+    public static final double MAX_MOTION_ALLOWED_ERROR = 0;
+
+    public static final SparkBaseConfig MOTOR_CONFIG_LEFT = new SparkMaxConfig()
         .idleMode(IdleMode.kBrake)
         .inverted(false);
 
-    public static final SparkBaseConfig RIGHT_MOTOR_CONFIG = new SparkMaxConfig()
+    public static final SparkBaseConfig MOTOR_CONFIG_RIGHT = new SparkMaxConfig()
         .idleMode(IdleMode.kBrake)
         .inverted(true);
+
+    public static final ClosedLoopConfig CLOSED_LOOP_CONFIG_RIGHT = MOTOR_CONFIG_RIGHT.closedLoop
+        .pidf(0, 0, 0, 0)
+        .outputRange(-1, 1);
+
+    public static final ClosedLoopConfig CLOSED_LOOP_CONFIG_LEFT = MOTOR_CONFIG_LEFT.closedLoop
+        .pidf(0, 0, 0, 0)
+        .outputRange(-1, 1);
+
+    public static final MAXMotionConfig MAX_MOTION_CONFIG_RIGHT = CLOSED_LOOP_CONFIG_RIGHT.maxMotion
+        .allowedClosedLoopError(0)
+        .maxAcceleration(0)
+        .maxVelocity(0);
+
+    public static final MAXMotionConfig MAX_MOTION_CONFIG_LEFT = CLOSED_LOOP_CONFIG_LEFT.maxMotion
+        .allowedClosedLoopError(MAX_MOTION_ALLOWED_ERROR)
+        .maxAcceleration(0)
+        .maxVelocity(0);
 
   }
 
